@@ -1,12 +1,26 @@
 {
   "name": "cypress-api-task",
   "scripts": {
-    "test": ""
+    "precy:run": "rm -rf cypress/screenshots cypress/results cypress/reports",
+    "cy:open": "npx cypress open",
+    "cy:run": "npx cypress run",
+    "report": "run-s report:*",
+    "report:merge": "npx mochawesome-merge cypress/results/json/*.json -o cypress/results/mochawesome-bundle.json",
+    "report:generate": "marge cypress/results/mochawesome-bundle.json -o cypress/reports/html",
+    "run-all": "npm-run-all precy:run cy:run report report:merge report:generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cypress": "12.7.0"
+  },
+  "devDependencies": {
+    "cypress-multi-reporters": "^1.6.3",
+    "mocha": "^10.2.0",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0",
+    "npm-run-all": "^4.1.5"
   }
 }
