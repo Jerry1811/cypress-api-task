@@ -1,13 +1,8 @@
+import { requestTemplate, headers, url } from '../fixtures/api-task.util'
+
 describe('API test cases for a GET request', () => {
   it('send a valid GET request', () => {
-    cy.request({
-      method: 'GET',
-      url: '/api/basketball/match/10247060',
-      headers: {
-        'X-RapidAPI-Key': '4cdec72919mshc504086a621d27ap117e6fjsn67bb70e06531',
-        'X-RapidAPI-Host': 'basketapi1.p.rapidapi.com',
-      },
-    }).as('match')
+    requestTemplate('GET', url.valid, headers.valid.key, headers.valid.host)
     cy.get('@match').its('status').should('eq', 200)
     cy.get('@match').then((response) => {
       cy.log(JSON.stringify(response.body))
@@ -15,15 +10,7 @@ describe('API test cases for a GET request', () => {
   })
 
   it('send a valid GET request with invalid endpoint', () => {
-    cy.request({
-      method: 'GET',
-      url: '/api/basketball/match/invalid',
-      failOnStatusCode: false,
-      headers: {
-        'X-RapidAPI-Key': '4cdec72919mshc504086a621d27ap117e6fjsn67bb70e06531',
-        'X-RapidAPI-Host': 'basketapi1.p.rapidapi.com',
-      },
-    }).as('match')
+    requestTemplate('GET', url.invalid, headers.valid.key, headers.valid.host)
     cy.get('@match').then((response) => {
       expect(response.status).to.equal(400)
       expect(response.body.message).to.equal('Bad Request')
@@ -32,15 +19,7 @@ describe('API test cases for a GET request', () => {
   })
 
   it('send a valid GET request with invalid headers', () => {
-    cy.request({
-      method: 'GET',
-      url: '/api/basketball/match/10247060',
-      failOnStatusCode: false,
-      headers: {
-        'X-RapidAPI-Key': 'some_key',
-        'X-RapidAPI-Host': 'some_host',
-      },
-    }).as('match')
+    requestTemplate('GET', url.valid, headers.invalid.key, headers.invalid.host)
     cy.get('@match').then((response) => {
       expect(response.status).to.equal(400)
       expect(response.body.messages).to.include("The host you've provided is invalid.")
@@ -50,15 +29,7 @@ describe('API test cases for a GET request', () => {
   })
 
   it('send a GET request with wrong request method', () => {
-    cy.request({
-      method: 'PATCH',
-      url: '/api/basketball/match/10247060',
-      failOnStatusCode: false,
-      headers: {
-        'X-RapidAPI-Key': '4cdec72919mshc504086a621d27ap117e6fjsn67bb70e06531',
-        'X-RapidAPI-Host': 'basketapi1.p.rapidapi.com',
-      },
-    }).as('match')
+    requestTemplate('PATCH', url.valid, headers.valid.key, headers.valid.host)
     cy.get('@match').then((response) => {
       expect(response.status).to.equal(404)
     })
